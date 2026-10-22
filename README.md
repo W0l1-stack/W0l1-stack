@@ -8,7 +8,7 @@ My work sits at the intersection of **AI agents, workflow automation, CRM, messa
 
 **Based in Lagos, Nigeria · Available for remote projects and collaborations**
 
-[🌐 Portfolio & case studies](https://wolistack.base44.app) · [💻 GitHub](https://github.com/W0l1-stack)
+[🌐 Portfolio](https://wolistack.base44.app) · [🧪 Interactive ChatGPT-built site](https://wolistack.olawalew345.chatgpt.site) · [💻 GitHub](https://github.com/W0l1-stack)
 
 ---
 
@@ -53,7 +53,7 @@ I work across both **client automations** and **software products**, from connec
 
 I'm interested in **AI automation engineering, CRM integrations, conversational AI, SaaS engineering, and long-term technical collaborations**.
 
-**Explore my work:** [wolistack.base44.app](https://wolistack.base44.app)
+**Explore my work:** [WoliStack portfolio](https://wolistack.base44.app) · [Interactive site](https://wolistack.olawalew345.chatgpt.site)
 
 ---
 
