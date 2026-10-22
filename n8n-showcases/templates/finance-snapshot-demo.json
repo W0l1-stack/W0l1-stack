@@ -1,0 +1,99 @@
+{
+  "name": "Finance Snapshot - Sanitized Public Demo (Manual Only)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "public-demo-trigger",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const examples = [\n  { date: \"2026-10-20\", context: \"personal\", currency: \"NGN\", kind: \"income\", category: \"freelance\", amount: 85000 },\n  { date: \"2026-10-20\", context: \"personal\", currency: \"NGN\", kind: \"expense\", category: \"groceries\", amount: 6000 },\n  { date: \"2026-10-21\", context: \"personal\", currency: \"NGN\", kind: \"expense\", category: \"transport\", amount: 4000 },\n  { date: \"2026-10-21\", context: \"business\", currency: \"NGN\", kind: \"income\", category: \"services\", amount: 120000 },\n  { date: \"2026-10-21\", context: \"business\", currency: \"NGN\", kind: \"expense\", category: \"operations\", amount: 20000 },\n  { date: \"2026-10-21\", context: \"personal\", currency: \"USD\", kind: \"income\", category: \"online work\", amount: 10 }\n];\n// Artificial test records only; no real accounts or customer data.\nreturn examples.map((row) => ({ json: row }));"
+      },
+      "id": "public-demo-transactions",
+      "name": "Generate Synthetic Transactions",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        500,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const transactions = $input.all().map((item) => item.json);\nconst buckets = {};\nfor (const t of transactions) {\n  if (![\"personal\", \"business\"].includes(t.context) ||\n      ![\"NGN\", \"USD\"].includes(t.currency) ||\n      ![\"income\", \"expense\"].includes(t.kind) ||\n      !Number.isFinite(Number(t.amount)) || Number(t.amount) < 0) {\n    throw new Error(\"Invalid demo transaction\");\n  }\n  const key = t.context + \":\" + t.currency;\n  if (!buckets[key]) {\n    buckets[key] = { context: t.context, currency: t.currency, income: 0, expenses: 0, transaction_count: 0 };\n  }\n  buckets[key][t.kind === \"income\" ? \"income\" : \"expenses\"] += Number(t.amount);\n  buckets[key].transaction_count++;\n}\nconst summaries = Object.values(buckets).map((s) => ({ ...s, net_cashflow: s.income - s.expenses }));\nreturn summaries.map((s) => ({ json: s }));"
+      },
+      "id": "public-demo-aggregate",
+      "name": "Aggregate Without Currency Conversion",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        800,
+        260
+      ]
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "jsCode": "const byCurrencyAndContext = $input.all().map((item) => item.json);\nreturn [{\n  json: {\n    demo: true,\n    source: \"synthetic transactions embedded in the workflow\",\n    warning: \"No exchange-rate conversion or production synchronization is performed\",\n    totals: byCurrencyAndContext,\n    bucket_count: byCurrencyAndContext.length\n  }\n}];"
+      },
+      "id": "public-demo-report",
+      "name": "Prepare Read-only Report",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1120,
+        260
+      ]
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Generate Synthetic Transactions",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Synthetic Transactions": {
+      "main": [
+        [
+          {
+            "node": "Aggregate Without Currency Conversion",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Aggregate Without Currency Conversion": {
+      "main": [
+        [
+          {
+            "node": "Prepare Read-only Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "pinData": {},
+  "tags": []
+}
