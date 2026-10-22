@@ -1,0 +1,155 @@
+{
+  "name": "Financial Dashboard Reporting Sync - REDACTED Configuration Required",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "public-sync-node-1",
+      "name": "Manual Sync",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        144,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT NOW() AS example_timestamp, 'REPLACE_WITH_AGGREGATION_FROM_YOUR_OWN_TEST_DATABASE' AS note",
+        "options": {}
+      },
+      "id": "public-sync-node-2",
+      "name": "Build Dashboard Snapshot",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.7,
+      "position": [
+        928,
+        288
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://example.invalid/REPLACE_WITH_YOUR_TEST_MART_URL",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {}
+      },
+      "id": "public-sync-node-3",
+      "name": "Sync Dashboard Mart",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.5,
+      "position": [
+        1536,
+        288
+      ]
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 5
+            }
+          ]
+        }
+      },
+      "id": "public-sync-node-4",
+      "name": "Every 5 Minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.4,
+      "position": [
+        144,
+        176
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### Public redacted reference\\nNo credentials, real SQL, customer data, or endpoints. Configure your own test environment before running.",
+        "height": 552,
+        "width": 704
+      },
+      "id": "public-sync-node-5",
+      "name": "01 · Refresh schedule",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### Public redacted reference\\nNo credentials, real SQL, customer data, or endpoints. Configure your own test environment before running.",
+        "height": 440,
+        "width": 512
+      },
+      "id": "public-sync-node-6",
+      "name": "02 · Build the snapshot",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        784,
+        32
+      ]
+    },
+    {
+      "parameters": {
+        "content": "### Public redacted reference\\nNo credentials, real SQL, customer data, or endpoints. Configure your own test environment before running.",
+        "height": 472,
+        "width": 480
+      },
+      "id": "public-sync-node-7",
+      "name": "03 · Sync the reporting mart",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        1360,
+        16
+      ]
+    }
+  ],
+  "connections": {
+    "Build Dashboard Snapshot": {
+      "main": [
+        [
+          {
+            "node": "Sync Dashboard Mart",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Every 5 Minutes": {
+      "main": [
+        [
+          {
+            "node": "Build Dashboard Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Manual Sync": {
+      "main": [
+        [
+          {
+            "node": "Build Dashboard Snapshot",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "pinData": {},
+  "tags": []
+}
