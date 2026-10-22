@@ -33,6 +33,14 @@ My work sits at the intersection of **AI agents, workflow automation, CRM, messa
 
 Some client and product repositories are private. The [portfolio](https://wolistack.base44.app) is the best starting point for project walkthroughs and visuals.
 
+## n8n workflow showcases
+
+I also publish **safe, credential-free examples** and architecture breakdowns for my automation work.
+
+- [Browse n8n showcases](n8n-showcases/README.md): Financial Intelligence Agent (264 nodes), dashboard reporting sync, and WhatsApp finance orchestration.
+- [Import a runnable finance snapshot demo](n8n-showcases/templates/finance-snapshot-demo.json): Manual-trigger reporting example with fictional financial records.
+- [Inspect the redacted dashboard sync graph](n8n-showcases/templates/financial-dashboard-sync.redacted.json): seven-node reference with no real connection credentials or endpoints.
+
 ## My toolkit
 
 **Automation & AI:** n8n · Make · Zapier · Claude · OpenAI · Gemini · AI agents · RAG workflows
